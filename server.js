@@ -3,11 +3,11 @@ var path = require('path');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(':memory:', (err) => {
+var db = new sqlite3.Database('./menusection.db', (err) => {
   if (err) {
     return console.error(err.message);
   }
-  console.log('Connected to the in-memory SQlite database.');
+  console.log('Connected to the SQlite database.');
 });
 
 var app = express();
@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-db.run('CREATE TABLE Menusection(id integer PRIMARY KEY, name text)', function (err) {
-  if (err) console.log(err.message);
-});
+// db.run('CREATE TABLE Menusection(id integer PRIMARY KEY, name text)', function (err) {
+//   if (err) console.log(err.message);
+// });
 
 app.get('/menusection', function(req, res) {
   db.all('SELECT id, name FROM Menusection', function(err, rows) {
